@@ -61,6 +61,7 @@ install_rabbitmq() {
   sleep 5
 
   echo "Installing rabbitmq ..."
+  kubectl apply -f ./rabbitmq-config/namespace.yaml
   kubectl apply -f ./rabbitmq-config/definitions.yaml
   helm install --namespace rabbitmq --name rabbitmq \
     -f ./rabbitmq-config/values_prod.yaml \
