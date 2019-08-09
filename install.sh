@@ -10,7 +10,7 @@ install_helm_client() {
   echo "Installing helm client..."
   curl -L https://git.io/get_helm.sh -o ./helm-install/get_helm.sh 
   chmod 700 ./helm-install/get_helm.sh
-  sh ./helm-install/get_helm.sh
+  ./helm-install/get_helm.sh
 }
 
 install_nginx_ingress() {
