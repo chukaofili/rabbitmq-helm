@@ -105,4 +105,12 @@ select yn in "Yes" "No"; do
     esac
 done
 
-# install_rabbitmq
+echo "Do you wish to install rabbitmq? enter 1 or 2:"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes )
+            install_rabbitmq
+            break;;
+        No ) break;;
+    esac
+done
