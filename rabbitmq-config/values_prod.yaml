@@ -115,7 +115,7 @@ rabbitmq:
     k8s_domain: cluster.local
 
   loadDefinition:
-    enabled: true
+    enabled: false
     secretName: rabbitmq-load-definition
 
   ## environment variables to configure rabbitmq
@@ -140,7 +140,7 @@ rabbitmq:
   ## Use this instead of `configuration` to add more configuration
   extraConfiguration: |-
     #disk_free_limit.absolute = 50MB
-    management.load_definitions = /app/load_definition.json
+    # management.load_definitions = /app/load_definition.json
 
   ## Configuration file content: advanced configuration
   ## Use this as additional configuraton in classic config format (Erlang term configuration format)
