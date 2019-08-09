@@ -68,7 +68,7 @@ get_loadbalancer_ip(){
     SERVICE_IP=$(kubectl get svc nginx-ingress-controller --namespace nginx-ingress --output jsonpath='{.status.loadBalancer.ingress[0].ip}')
     echo "Modify your dns records to point your domain ${RABBITMQ_PUBLIC_DOMAIN} to ${SERVICE_IP}"
     echo "You can visit https://${RABBITMQ_PUBLIC_DOMAIN} to access the managment plugin"
-    echo "You can use amqp://${RABBITMQ_USERNAME}:${RABBITMQ_PASSWORD}@${RABBITMQ_PUBLIC_DOMAIN} to access the rabbitmq. The default queue is named 'default'"
+    echo "You can use amqp://${RABBITMQ_USERNAME}:${RABBITMQ_PASSWORD}@${RABBITMQ_PUBLIC_DOMAIN} to access \n the rabbitmq. The default queue is named 'default'"
     echo "================================================================================================="
 }
 
