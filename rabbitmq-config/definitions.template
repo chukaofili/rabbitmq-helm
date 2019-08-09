@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rabbitmq-load-definition
+  namespace: rabbitmq
+type: Opaque
+stringData:
+  load_definition.json: |-
+    {
+      "users": [{
+        "name": "admin",
+        "password": "__RABBITMQ_PASSWORD__",
+        "tags": "administrator"
+      }],
+      "vhosts": [{
+        "name": "/"
+      }],
+      "policies": [{
+        "name": "ha-all",
+        "pattern": ".*",
+        "vhost": "/",
+        "definition": {
+          "ha-mode": "all",
+          "ha-sync-mode": "automatic",
+        }
+      }],
+      "permissions": [{
+        "user": "admin",
+        "vhost": "/",
+        "configure": ".*",
+        "write": ".*",
+        "read": ".*"
+      }],
+      "queues": [{
+        "name": "default",
+        "vhost": "/",
+        "durable": true,
+        "auto_delete": false,
+        "arguments": {}
+      }],
+      "exchanges": [],
+      "bindings": []
+    }

@@ -44,8 +44,9 @@ install_http_provider(){
   ACCOUNT_EMAIL=${ACCOUNT_EMAIL:?"Must provide ACCOUNT_EMAIL in ./cert-manager-install/.env file. e.g. account@email.com"}
 
   echo "Setting up letsencrpt http01 cluster issuers ..."
-  sed "s#__ACCOUNT_EMAIL__#${ACCOUNT_EMAIL}#" ./cert-manager-install/cluster-issuer-http01.template > ./cert-manager-install/cluster-issuer-http01.yaml
-  kubectl apply -f ./cert-manager-install/cluster-issuer-http01.yaml -n cert-manager
+  sed "s#__ACCOUNT_EMAIL__#${ACCOUNT_EMAIL}#" ./cert-manager-install/cluster-issuer-http01.template > ./cert-manager-install/cluster-issuer-http01.tmp.yaml
+  kubectl apply -f ./cert-manager-install/cluster-issuer-http01.tmp.yaml -n cert-manager
+  rm ./cert-manager-install/cluster-issuer-http01.tmp.yaml
 }
 
 install_rabbitmq() {
@@ -62,7 +63,9 @@ install_rabbitmq() {
 
   echo "Installing rabbitmq ..."
   kubectl apply -f ./rabbitmq-config/namespace.yaml
-  kubectl apply -f ./rabbitmq-config/definitions.yaml
+  sed "s#__RABBITMQ_PASSWORD__#${RABBITMQ_PASSWORD}#" ./rabbitmq-config/definitions.template > ./rabbitmq-config/definitions.tmp.yaml
+  kubectl apply -f ./rabbitmq-config/definitions.tmp.yaml
+  rm ./rabbitmq-config/definitions.tmp.yaml
   helm install --namespace rabbitmq --name rabbitmq \
     -f ./rabbitmq-config/values_prod.yaml \
     --set rabbitmq.username="$RABBITMQ_USERNAME" \
