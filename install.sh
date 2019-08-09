@@ -40,6 +40,7 @@ install_cert_manager() {
 
 install_http_provider(){
   source ./cert-manager-install/.env
+  ACCOUNT_EMAIL=${ACCOUNT_EMAIL:?"Must provide ACCOUNT_EMAIL in ./cert-manager-install/.env file. e.g. account@email.com"}
 
   echo "Setting up letsencrpt http01 cluster issuers ..."
   sed "s#__ACCOUNT_EMAIL__#${ACCOUNT_EMAIL}#" ./cert-manager-install/cluster-issuer-http01.template > ./cert-manager-install/cluster-issuer-http01.yaml
@@ -48,6 +49,11 @@ install_http_provider(){
 
 install_rabbitmq() {
   source ./rabbitmq-config/.env
+  RABBITMQ_USERNAME=${RABBITMQ_USERNAME:?"Must provide RABBITMQ_USERNAME in ./rabbitmq-config/.env file. e.g. user"}
+  RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD:?"Must provide RABBITMQ_PASSWORD in ./rabbitmq-config/.env file. e.g. password"}
+  RABBITMQ_ERLANG_COOKIE=${RABBITMQ_ERLANG_COOKIE:?"Must provide RABBITMQ_ERLANG_COOKIE in ./rabbitmq-config/.env file. e.g. SECRET"}
+  RABBITMQ_PUBLIC_DOMAIN=${RABBITMQ_PUBLIC_DOMAIN:?"Must provide RABBITMQ_PUBLIC_DOMAIN in ./rabbitmq-config/.env file. e.g. rmq.example.com"}
+  RABBITMQ_TLS_SECRETNAME=${RABBITMQ_TLS_SECRETNAME:?"Must provide RABBITMQ_TLS_SECRETNAME in ./rabbitmq-config/.env file. e.g. rmq-example-tls"}
 
   echo "Making sure helm is up to date ..."
   helm init --upgrade
