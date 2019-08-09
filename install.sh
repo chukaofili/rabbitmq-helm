@@ -49,7 +49,7 @@ install_http_provider(){
   rm ./cert-manager-install/cluster-issuer-http01.tmp.yaml
 }
 
-install_rabbitmq() {
+install_rabbitmq_using_helm() {
   source ./rabbitmq-config/.env
   RABBITMQ_USERNAME=${RABBITMQ_USERNAME:?"Must provide RABBITMQ_USERNAME in ./rabbitmq-config/.env file. e.g. user"}
   RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD:?"Must provide RABBITMQ_PASSWORD in ./rabbitmq-config/.env file. e.g. password"}
@@ -75,6 +75,37 @@ install_rabbitmq() {
     --set ingress.tlsSecret="$RABBITMQ_TLS_SECRETNAME" \
       stable/rabbitmq
 }
+
+install_rabbitmq_k8s() {
+  source ./rabbitmq-config/.env
+  RABBITMQ_USERNAME=${RABBITMQ_USERNAME:?"Must provide RABBITMQ_USERNAME in ./rabbitmq-config/.env file. e.g. user"}
+  RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD:?"Must provide RABBITMQ_PASSWORD in ./rabbitmq-config/.env file. e.g. password"}
+  RABBITMQ_ERLANG_COOKIE=${RABBITMQ_ERLANG_COOKIE:?"Must provide RABBITMQ_ERLANG_COOKIE in ./rabbitmq-config/.env file. e.g. SECRET"}
+  RABBITMQ_PUBLIC_DOMAIN=${RABBITMQ_PUBLIC_DOMAIN:?"Must provide RABBITMQ_PUBLIC_DOMAIN in ./rabbitmq-config/.env file. e.g. rmq.example.com"}
+  RABBITMQ_TLS_SECRETNAME=${RABBITMQ_TLS_SECRETNAME:?"Must provide RABBITMQ_TLS_SECRETNAME in ./rabbitmq-config/.env file. e.g. rmq-example-tls"}
+
+  echo "Installing rabbitmq using deployment files..."
+  sed -i "/CHANGEME/cdefault_pass=${RABBITMQ_PASSWORD//\\/\\\\}"
+  sed "s#__RABBITMQ_PASSWORD__#${RABBITMQ_PASSWORD}#" ./deployment/secret.template > ./deployment/secret.tmp.yaml
+  sed "s#__RABBITMQ_PASSWORD__#${RABBITMQ_PASSWORD}#" ./deployment/secret.template > ./deployment/secret.tmp.yaml
+  sed "s#__RABBITMQ_PASSWORD__#${RABBITMQ_PASSWORD}#" ./deployment/secret.template > ./deployment/secret.tmp.yaml
+  sed "s#__RABBITMQ_PASSWORD__#${RABBITMQ_PASSWORD}#" ./deployment/secret.template > ./deployment/secret.tmp.yaml
+#   kubectl apply -f ./deployment/definitions.tmp.yaml
+#   rm ./deployment/*.tmp.yaml
+#   kubectl apply -f ./deployment
+
+#   helm install --namespace rabbitmq --name rabbitmq \
+#     -f ./rabbitmq-config/values_prod.yaml \
+#     --set rabbitmq.username="$RABBITMQ_USERNAME" \
+#     --set rabbitmq.password="$RABBITMQ_PASSWORD" \
+#     --set rabbitmq.erlangCookie="$RABBITMQ_ERLANG_COOKIE" \
+#     --set ingress.hostName="$RABBITMQ_PUBLIC_DOMAIN" \
+#     --set ingress.tlsSecret="$RABBITMQ_TLS_SECRETNAME" \
+#       stable/rabbitmq
+}
+
+install_rabbitmq_k8s
+exit();
 
 get_loadbalancer_ip(){
     echo "================================================================================================="
@@ -134,7 +165,7 @@ echo "Do you wish to install rabbitmq? enter 1 or 2:"
 select yn in "Yes" "No"; do
     case $yn in
         Yes )
-            install_rabbitmq
+            install_rabbitmq_using_helm
             get_loadbalancer_ip
             break;;
         No ) break;;
