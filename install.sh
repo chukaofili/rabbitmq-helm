@@ -3,7 +3,7 @@
 install_helm() {
   echo "Installing helm ..."
   kubectl create -f ./helm-install/rbac-config.yaml
-  helm init --service-account tiller --history-max 200
+  helm init --service-account tiller --history-max 200 --tiller-tls-verify
 }
 
 install_helm_client() {
