@@ -178,10 +178,10 @@ spec:
         imagePullPolicy: "IfNotPresent"
         env:
         - name: RABBIT_USER
-            valueFrom:
-              secretKeyRef:
-                name: rabbitmq
-                key: rabbitmq-username
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq
+              key: rabbitmq-username
         - name: RABBIT_PASSWORD
           valueFrom:
             secretKeyRef:
