@@ -115,8 +115,8 @@ rabbitmq:
     k8s_domain: cluster.local
 
   loadDefinition:
-    enabled: false
-    secretName: load-definition
+    enabled: true
+    secretName: rabbitmq-load-definition
 
   ## environment variables to configure rabbitmq
   ## ref: https://www.rabbitmq.com/configure.html#customise-environment
