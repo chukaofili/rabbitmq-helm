@@ -7,6 +7,7 @@ type: Opaque
 stringData:
   load_definition.json: |-
     {
+      "vhosts":[ { "name": "/" } ],
       "policies": [{
         "vhost": "/",
         "name": "ha-all",
