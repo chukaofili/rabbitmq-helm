@@ -76,6 +76,7 @@ select yn in "Yes" "No"; do
     case $yn in
         Yes )
             install_helm
+            sleep 5
             break;;
         No ) break;;
     esac
@@ -86,6 +87,7 @@ select yn in "Yes" "No"; do
     case $yn in
         Yes )
             install_helm_client
+            sleep 5
             break;;
         No ) break;;
     esac
@@ -96,6 +98,7 @@ select yn in "Yes" "No"; do
     case $yn in
         Yes )
             install_nginx_ingress
+            sleep 5
             break;;
         No ) break;;
     esac
@@ -106,7 +109,9 @@ select yn in "Yes" "No"; do
     case $yn in
         Yes )
             install_cert_manager
+            sleep 5
             install_http_provider
+            sleep 5
             break;;
         No ) break;;
     esac
