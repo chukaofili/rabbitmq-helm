@@ -109,7 +109,7 @@ select yn in "Yes" "No"; do
     case $yn in
         Yes )
             install_cert_manager
-            sleep 5
+            sleep 15
             install_http_provider
             sleep 5
             break;;
