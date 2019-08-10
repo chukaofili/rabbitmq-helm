@@ -1,9 +1,9 @@
 require('dotenv').config();
-const ampq_url = process.env.RABBITMQ_URL || 'amqp://localhost';
+const amqp_url = process.env.RABBITMQ_URL || 'amqp://localhost';
 const queue = process.env.RABBITMQ_QUEUE || 'default';
 const amqp = require('amqplib/callback_api');
 
-amqp.connect(ampq_url, (error, connection) => {
+amqp.connect(amqp_url, (error, connection) => {
   if (error) { throw error; }
 
   connection.createChannel((err, channel) => {

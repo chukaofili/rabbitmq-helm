@@ -21,3 +21,10 @@ data:
     loopback_users.guest = false
     #disk_free_limit.absolute = 50MB
     management.load_definitions = /app/load_definition.json
+    ## tls
+    listeners.ssl.default = 5671
+    ssl_options.cacertfile = /usr/local/etc/tls/tls.crt
+    ssl_options.certfile = /usr/local/etc/tls/tls.crt
+    ssl_options.keyfile = /usr/local/etc/tls/tls.key
+    ssl_options.verify = verify_peer
+    ssl_options.fail_if_no_peer_cert = false

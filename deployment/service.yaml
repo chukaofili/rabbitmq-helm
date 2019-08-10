@@ -11,6 +11,9 @@ spec:
   - name: epmd
     port: 4369
     targetPort: epmd
+  - name: amqps
+    port: 5671
+    targetPort: amqps
   - name: amqp
     port: 5672
     targetPort: amqp
@@ -40,6 +43,9 @@ spec:
   - name: epmd
     port: 4369
     targetPort: epmd
+  - name: amqps
+    port: 5671
+    targetPort: amqps
   - name: amqp
     port: 5672
     targetPort: amqp
@@ -52,6 +58,26 @@ spec:
   - name: metrics
     port: 9090
     targetPort: metrics
+  selector:
+    app: rabbitmq
+    release: "rabbitmq"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq-lb
+  labels:
+    app: rabbitmq
+    release: "rabbitmq"
+spec:
+  type: LoadBalancer
+  ports:
+  - name: amqps
+    port: 5671
+    targetPort: amqps
+  - name: amqp
+    port: 5672
+    targetPort: amqp
   selector:
     app: rabbitmq
     release: "rabbitmq"

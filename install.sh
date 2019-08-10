@@ -56,8 +56,11 @@ install_rabbitmq_k8s() {
   sed -i .bak "s#__RABBITMQ_ERLANG_COOKIE_BASE64__#${RABBITMQ_ERLANG_COOKIE_BASE64}#" ./deployment/secret.tmp.yaml
   sed "s#__RABBITMQ_PUBLIC_DOMAIN__#${RABBITMQ_PUBLIC_DOMAIN}#" ./deployment/ingress.template > ./deployment/ingress.tmp.yaml
   sed -i .bak "s#__RABBITMQ_TLS_SECRETNAME__#${RABBITMQ_TLS_SECRETNAME}#" ./deployment/ingress.tmp.yaml
+  sed "s#__RABBITMQ_TLS_SECRETNAME__#${RABBITMQ_TLS_SECRETNAME}#" ./deployment/statefulset.template > ./deployment/statefulset.tmp.yaml
   rm ./deployment/*.bak
-#   kubectl apply -f ./deployment
+#   kubectl apply -f ./deployment/namespace.yaml
+#   kubectl apply -f ./deployment -n rabbitmq
+#   rm ./deployment/*.tmp.yaml
 }
 
 install_rabbitmq_k8s
@@ -66,9 +69,11 @@ exit 1;
 get_loadbalancer_ip(){
     echo "================================================================================================="
     SERVICE_IP=$(kubectl get svc nginx-ingress-controller --namespace nginx-ingress --output jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    AMQP_LB_IP=$(kubectl get svc nginx-ingress-controller --namespace nginx-ingress --output jsonpath='{.status.loadBalancer.ingress[0].ip}')
     echo "Modify your dns records to point your domain ${RABBITMQ_PUBLIC_DOMAIN} to ${SERVICE_IP}"
+    echo "Modify your dns records to point your domain amqp-${RABBITMQ_PUBLIC_DOMAIN} to ${AMQP_LB_IP}"
     echo "You can visit https://${RABBITMQ_PUBLIC_DOMAIN} to access the managment plugin"
-    echo "You can use amqp://${RABBITMQ_USERNAME}:${RABBITMQ_PASSWORD}@${RABBITMQ_PUBLIC_DOMAIN} to access \n the rabbitmq. The default queue is named 'default'"
+    echo "You can use amqp://${RABBITMQ_USERNAME}:${RABBITMQ_PASSWORD}@amqp-${RABBITMQ_PUBLIC_DOMAIN} to access \n rabbitmq. The default queue is named 'default'"
     echo "================================================================================================="
 }
 

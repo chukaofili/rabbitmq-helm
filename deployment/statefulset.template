@@ -96,9 +96,13 @@ spec:
           - name: load-definition-volume
             mountPath: /app
             readOnly: true
+          - mountPath: /usr/local/etc/tls
+            name: tls-mount
         ports:
         - name: epmd
           containerPort: 4369
+        - name: amqps
+          containerPort: 5671
         - name: amqp
           containerPort: 5672
         - name: dist
@@ -223,6 +227,10 @@ spec:
         - name: load-definition-volume
           secret:
             secretName: "rabbitmq-load-definition"
+        - name: tls-mount
+          secret:
+            defaultMode: 420
+            secretName: __RABBITMQ_TLS_SECRETNAME__
   volumeClaimTemplates:
     - metadata:
         name: data
