@@ -1,5 +1,18 @@
 #!/bin/bash
 
+install_helm() {
+  echo "Installing helm ..."
+  kubectl apply -f ./helm-install/rbac-config.yaml
+  helm init --service-account tiller --history-max 200
+}
+
+install_helm_client() {
+  echo "Installing helm client..."
+  curl -L https://git.io/get_helm.sh -o ./helm-install/get_helm.sh 
+  chmod 700 ./helm-install/get_helm.sh
+  ./helm-install/get_helm.sh
+}
+
 install_nginx_ingress() {
   echo "Installing nginx ingress ..."
   kubectl apply -f ./nginx-ingress-install/namespace.yaml
@@ -69,13 +82,35 @@ exit 1;
 get_loadbalancer_ip(){
     echo "================================================================================================="
     SERVICE_IP=$(kubectl get svc nginx-ingress-controller --namespace nginx-ingress --output jsonpath='{.status.loadBalancer.ingress[0].ip}')
-    AMQP_LB_IP=$(kubectl get svc nginx-ingress-controller --namespace nginx-ingress --output jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    AMQP_LB_IP=$(kubectl get svc rabbitmq-lb --namespace rabbitmq --output jsonpath='{.status.loadBalancer.ingress[0].ip}')
     echo "Modify your dns records to point your domain ${RABBITMQ_PUBLIC_DOMAIN} to ${SERVICE_IP}"
     echo "Modify your dns records to point your domain amqp-${RABBITMQ_PUBLIC_DOMAIN} to ${AMQP_LB_IP}"
     echo "You can visit https://${RABBITMQ_PUBLIC_DOMAIN} to access the managment plugin"
     echo "You can use amqp://${RABBITMQ_USERNAME}:${RABBITMQ_PASSWORD}@amqp-${RABBITMQ_PUBLIC_DOMAIN} to access \n rabbitmq. The default queue is named 'default'"
     echo "================================================================================================="
 }
+
+echo "Do you wish to install helm? enter 1 or 2:"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes )
+            install_helm
+            sleep 5
+            break;;
+        No ) break;;
+    esac
+done
+
+echo "Do you wish to install helm client? enter 1 or 2:"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes )
+            install_helm_client
+            sleep 5
+            break;;
+        No ) break;;
+    esac
+done
 
 echo "Do you wish to install nginx-ingress? enter 1 or 2:"
 select yn in "Yes" "No"; do

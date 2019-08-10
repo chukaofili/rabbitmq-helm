@@ -8,8 +8,6 @@ amqp.connect(amqp_url, (error, connection) => {
 
   connection.createChannel((err, channel) => {
     if (err) { throw err; }
-    const msg = 'Hello World!';
-
     channel.assertQueue(queue, {
       durable: true
     });
